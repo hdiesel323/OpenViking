@@ -1,0 +1,40 @@
+{
+  "proposal_id": "dialectic-fixture-low-risk",
+  "claim": "Future agents should prefer the existing memory template registry when adding narrow memory types.",
+  "counterclaim": "A bespoke writer could be faster for one-off memory experiments but would bypass configured overrides.",
+  "synthesis": "Add dialectic proposal capture through a registry-loaded agent memory template and keep promotion as a separate validation decision.",
+  "evidence_references": [
+    {
+      "uri": "viking://session/red-3052/archive/pytest",
+      "receipt_id": "pytest-dialectic",
+      "source": "pytest",
+      "status": "success",
+      "independence_key": "unit-tests"
+    },
+    {
+      "uri": "viking://session/red-3052/archive/review",
+      "receipt_id": "review-dialectic",
+      "source": "static-review",
+      "status": "success",
+      "independence_key": "review"
+    }
+  ],
+  "confidence": 0.93,
+  "falsifier": "The registry cannot load the dialectic proposal memory type or the helper promotes a protected scope.",
+  "risk_class": "low",
+  "scope": {
+    "summary": "Agent memory proposal capture only",
+    "categories": ["workflow", "tests"],
+    "reversible": true
+  },
+  "expiry": "2027-01-31T00:00:00Z",
+  "promotion_status": "draft",
+  "unresolved_contradiction": false,
+  "eval_gates": [
+    {
+      "name": "dialectic-unit-fixtures",
+      "passed": true,
+      "receipt_id": "pytest-dialectic"
+    }
+  ]
+}

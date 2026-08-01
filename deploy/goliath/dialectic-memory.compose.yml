@@ -1,0 +1,33 @@
+services:
+  openviking-dialectic:
+    image: ${OPENVIKING_IMAGE:?pin the private fork image tag, for example ghcr.io/hdiesel323/openviking:feat-red-3052-dialectic-memory}
+    container_name: openviking-dialectic
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1933:1933"
+    environment:
+      OPENVIKING_WITH_BOT: "0"
+      OPENVIKING_SERVER_HOST: "0.0.0.0"
+      OPENVIKING_CONFIG_FILE: "/app/.openviking/ov.conf"
+      OPENVIKING_CLI_CONFIG_FILE: "/app/.openviking/ovcli.conf"
+      OPENVIKING_HEALTH_MAX_ATTEMPTS: "180"
+    volumes:
+      - type: bind
+        source: ${OPENVIKING_DATA_DIR:-/opt/openviking-dialectic}
+        target: /app/.openviking
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:1933/health >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+    cpus: "2.0"
+    mem_limit: 4g
+    pids_limit: 512
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

@@ -1,0 +1,119 @@
+memory_type: dialectic_proposals
+description: |
+  A narrow agent self-improvement proposal captured as a falsifiable dialectic.
+
+  Extract only when the session produced a concrete candidate change to future
+  agent behavior and enough evidence exists to preserve the proposal for later
+  review. Do not apply the proposal, mutate skills, change permissions, or
+  promote it while extracting memory. This template records the proposal only.
+
+  Protected categories always require explicit approval before promotion:
+  identity, permissions, credentials, policy, production_behavior,
+  destructive_actions, skill_code.
+
+embedding_template: |-
+  {{ claim }}
+
+  {{ synthesis }}
+
+  Risk: {{ risk_class }}
+  Scope: {{ scope }}
+
+directory: "viking://user/{{ user_space }}/memories/dialectic_proposals"
+filename_template: "{{ proposal_name }}_{{ extract_context.get_session_timestamp() }}.md"
+enabled: true
+operation_mode: "add_only"
+stage: agent
+agent_only: true
+peer_enabled: true
+
+content_template: |
+  # {{ proposal_name }}
+  - Claim: {{ claim }}
+  - Counterclaim: {{ counterclaim }}
+  - Synthesis: {{ synthesis }}
+  - Evidence References: {{ evidence_references }}
+  - Confidence: {{ confidence }}
+  - Falsifier: {{ falsifier }}
+  - Risk Class: {{ risk_class }}
+  - Scope: {{ scope }}
+  - Expiry: {{ expiry }}
+  - Promotion Status: {{ promotion_status }}
+
+fields:
+  - name: proposal_name
+    type: string
+    description: |
+      Stable lowercase snake_case name for exactly one self-improvement proposal.
+      Max 6 words. Do not include raw ids, dates, or user names.
+    merge_op: immutable
+
+  - name: claim
+    type: string
+    description: |
+      The positive behavioral claim being proposed. It must be specific enough
+      for a future reviewer to accept, reject, or test.
+    merge_op: immutable
+
+  - name: counterclaim
+    type: string
+    description: |
+      The strongest practical objection, risk, or case where the claim may fail.
+    merge_op: immutable
+
+  - name: synthesis
+    type: string
+    description: |
+      The narrow proposed rule after considering the counterclaim. Phrase it as
+      a reversible candidate, not as already-approved policy.
+    merge_op: immutable
+
+  - name: evidence_references
+    type: string
+    description: |
+      JSON array of evidence reference objects with uri, receipt_id, source,
+      status, and optional independence_key. Include only replayable references
+      to session archives, eval runs, tests, receipts, or cited resources.
+    merge_op: immutable
+
+  - name: confidence
+    type: float32
+    description: |
+      Numeric confidence from 0.0 to 1.0. Low-risk eligibility requires >= 0.90.
+    merge_op: immutable
+
+  - name: falsifier
+    type: string
+    description: |
+      A concrete observation, test result, contradiction, or incident that would
+      invalidate the synthesis.
+    merge_op: immutable
+
+  - name: risk_class
+    type: string
+    description: |
+      Exactly one of: low, medium, high, protected. Use protected for identity,
+      permissions, credentials, policy, production behavior, destructive
+      actions, or skill code.
+    merge_op: immutable
+
+  - name: scope
+    type: string
+    description: |
+      JSON object with summary, categories, and reversible. Categories may
+      include identity, permissions, credentials, policy, production_behavior,
+      destructive_actions, skill_code, workflow, tests, docs, or local_tooling.
+    merge_op: immutable
+
+  - name: expiry
+    type: string
+    description: |
+      ISO-8601 timestamp or date after which the proposal must be revalidated.
+    merge_op: immutable
+
+  - name: promotion_status
+    type: string
+    description: |
+      Exactly one of: draft, needs_approval, eligible_low_risk, promoted,
+      rejected, expired. Extraction should normally write draft or needs_approval.
+    merge_op: immutable

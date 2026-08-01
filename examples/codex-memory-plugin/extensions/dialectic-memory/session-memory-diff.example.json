@@ -1,0 +1,34 @@
+{
+  "memory_type": "dialectic_proposals",
+  "proposal": {
+    "claim": "Future agents should store disputed self-improvement ideas as proposal memories before changing behavior.",
+    "counterclaim": "Some proposals are too risky or under-evidenced to preserve as actionable guidance.",
+    "synthesis": "Record falsifiable proposals with risk, evidence, expiry, and promotion status; validate separately before promotion.",
+    "evidence_references": [
+      {
+        "uri": "viking://session/example/archive/unit-test",
+        "receipt_id": "unit-test-receipt",
+        "source": "unit-tests",
+        "status": "success",
+        "independence_key": "tests"
+      },
+      {
+        "uri": "viking://session/example/archive/review",
+        "receipt_id": "review-receipt",
+        "source": "review",
+        "status": "success",
+        "independence_key": "review"
+      }
+    ],
+    "confidence": 0.91,
+    "falsifier": "The proposal changes protected behavior without approval or lacks two independent successful receipts.",
+    "risk_class": "low",
+    "scope": {
+      "summary": "Memory capture only",
+      "categories": ["workflow"],
+      "reversible": true
+    },
+    "expiry": "2027-01-31T00:00:00Z",
+    "promotion_status": "draft"
+  }
+}
