@@ -13,7 +13,7 @@ test -s "$passphrase_file"
 docker exec "$container" ov language en >/dev/null
 docker exec "$container" sh -lc '
   printf "%s" "$OPENVIKING_ROOT_API_KEY" |
-    ov config add custom \
+    /app/.venv/bin/ov config add custom \
       --name kanister-backup-local \
       --url http://127.0.0.1:1933 \
       --root-api-key-stdin \
