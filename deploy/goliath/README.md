@@ -20,6 +20,7 @@ fork branch `feat/red-3052-dialectic-memory`. It is not a deployment action.
 ```sh
 export OPENVIKING_IMAGE=ghcr.io/hdiesel323/openviking@sha256:<image-digest>
 export OPENVIKING_DATA_DIR=/opt/openviking-dialectic
+export OPENVIKING_ROOT_API_KEY="$(infisical secrets get OPENVIKING_ROOT_API_KEY --projectId <project-id> --env dev --path /kanister-memory --plain)"
 docker compose -f deploy/goliath/dialectic-memory.compose.yml up -d
 docker run --rm --network canister-network curlimages/curl:8.12.1 \
   -fsS http://openviking-dialectic:1933/health
@@ -27,8 +28,10 @@ docker run --rm --network canister-network curlimages/curl:8.12.1 \
   -fsS http://openviking-dialectic:1933/ready
 ```
 
-The mounted `ov.conf` must be provisioned by the operator's secret/config
-system. This repository intentionally contains no root API key, embedding key,
+The mounted `ov.conf` must reference `${OPENVIKING_ROOT_API_KEY}` and be
+provisioned by the operator's secret/config system. Do not persist the exported
+shell value; the example is intended for a short-lived Infisical-backed deploy
+process. This repository intentionally contains no root API key, embedding key,
 VLM key, Infisical token, or machine credential.
 
 ## Resource Defaults

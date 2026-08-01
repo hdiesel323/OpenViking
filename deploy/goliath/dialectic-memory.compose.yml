@@ -9,6 +9,7 @@ services:
       OPENVIKING_CONFIG_FILE: "/app/.openviking/ov.conf"
       OPENVIKING_CLI_CONFIG_FILE: "/app/.openviking/ovcli.conf"
       OPENVIKING_HEALTH_MAX_ATTEMPTS: "180"
+      OPENVIKING_ROOT_API_KEY: ${OPENVIKING_ROOT_API_KEY:?load the root key from Infisical}
     volumes:
       - type: bind
         source: ${OPENVIKING_DATA_DIR:-/opt/openviking-dialectic}
@@ -24,6 +25,11 @@ services:
     cpus: "2.0"
     mem_limit: 4g
     pids_limit: 512
+    read_only: true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:size=256m,mode=1777
     security_opt:
       - no-new-privileges:true
     logging:
