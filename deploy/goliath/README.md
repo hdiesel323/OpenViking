@@ -5,21 +5,26 @@ fork branch `feat/red-3052-dialectic-memory`. It is not a deployment action.
 
 ## Operator Contract
 
-- Use a pinned private image tag through `OPENVIKING_IMAGE`; do not use `latest`.
+- Use an immutable private image digest through `OPENVIKING_IMAGE`; do not use
+  a mutable tag or `latest`.
 - Mount one persistent host directory at `/app/.openviking`.
 - Put `ov.conf`, `ovcli.conf`, and workspace data in that mounted directory.
 - Keep VikingBot disabled with `OPENVIKING_WITH_BOT=0`.
+- Attach only to the existing private `canister-network`; this profile publishes
+  no host port, so Kanister is the only supported caller.
 - Probe liveness with `GET /health` and readiness with `GET /ready`.
 - Store all secrets outside this repo and outside the compose file.
 
 ## Example
 
 ```sh
-export OPENVIKING_IMAGE=ghcr.io/hdiesel323/openviking:feat-red-3052-dialectic-memory
+export OPENVIKING_IMAGE=ghcr.io/hdiesel323/openviking@sha256:<image-digest>
 export OPENVIKING_DATA_DIR=/opt/openviking-dialectic
 docker compose -f deploy/goliath/dialectic-memory.compose.yml up -d
-curl -fsS http://127.0.0.1:1933/health
-curl -fsS http://127.0.0.1:1933/ready
+docker run --rm --network canister-network curlimages/curl:8.12.1 \
+  -fsS http://openviking-dialectic:1933/health
+docker run --rm --network canister-network curlimages/curl:8.12.1 \
+  -fsS http://openviking-dialectic:1933/ready
 ```
 
 The mounted `ov.conf` must be provisioned by the operator's secret/config
