@@ -679,10 +679,11 @@ async def restore_ovpack(
             if kind in {"manifest", "internal"} or rel_path == "":
                 continue
             if kind == "directory":
-                # Public scope roots are abstract routing namespaces. Their
+                # viking://user is a synthetic routing namespace. Its
                 # concrete children (for example user/alice) are writable,
-                # but creating viking://user itself is intentionally denied.
-                if rel_path in PUBLIC_SCOPES:
+                # but creating the root itself is intentionally denied.
+                # viking://resources is a real directory and must be restored.
+                if rel_path == "user":
                     continue
                 await viking_fs.mkdir(join_uri(root_uri, rel_path), exist_ok=True, ctx=ctx)
                 continue
