@@ -10,6 +10,7 @@ plain_name="openviking-${stamp}.ovpack"
 
 install -d -m 0700 "$data_dir/backup-staging" "$backup_dir"
 test -s "$passphrase_file"
+docker exec "$container" ov language en >/dev/null
 docker exec "$container" ov backup "/app/.openviking/backup-staging/$plain_name"
 gpg --batch --yes --symmetric --cipher-algo AES256 \
   --passphrase-file "$passphrase_file" \
