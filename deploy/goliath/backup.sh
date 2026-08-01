@@ -12,21 +12,19 @@ install -d -m 0700 "$data_dir/backup-staging" "$backup_dir"
 test -s "$passphrase_file"
 docker exec "$container" ov language en >/dev/null
 docker exec "$container" sh -lc '
-  printf "%s" "$OPENVIKING_ROOT_API_KEY" |
-    /app/.venv/bin/ov config add custom \
-      --name kanister-backup-local \
-      --url http://127.0.0.1:1933 \
-      --root-api-key-stdin \
-      --account kanister \
-      --user tenant-1 \
-      --activate \
-      -o json >/dev/null
   /app/.venv/bin/python - <<'"'"'PY'"'"'
 import json
+import os
 
 path = "/app/.openviking/ovcli.conf"
-with open(path, encoding="utf-8") as handle:
-    config = json.load(handle)
+root_key = os.environ["OPENVIKING_ROOT_API_KEY"]
+config = {
+    "url": "http://127.0.0.1:1933",
+    "api_key": root_key,
+    "root_api_key": root_key,
+    "account": "kanister",
+    "user": "tenant-1",
+}
 config["extra_headers"] = {"X-OpenViking-Role": "admin"}
 with open(path, "w", encoding="utf-8") as handle:
     json.dump(config, handle)
