@@ -618,6 +618,8 @@ async def test_backup_restore_contract(temp_ovpack_path: Path, request_ctx: Requ
         "viking://resources/README.md",
         "viking://user/alice/sessions/sess_1/.meta.json",
     ]
+    assert "viking://resources" not in fake_fs.created_dirs
+    assert "viking://user" not in fake_fs.created_dirs
     assert fake_fs.tree_calls == ["viking://resources", "viking://user"]
 
 
