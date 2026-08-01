@@ -21,6 +21,17 @@ docker exec "$container" sh -lc '
       --user tenant-1 \
       --activate \
       -o json >/dev/null
+  /app/.venv/bin/python - <<'"'"'PY'"'"'
+import json
+
+path = "/app/.openviking/ovcli.conf"
+with open(path, encoding="utf-8") as handle:
+    config = json.load(handle)
+config["extra_headers"] = {"X-OpenViking-Role": "admin"}
+with open(path, "w", encoding="utf-8") as handle:
+    json.dump(config, handle)
+    handle.write("\n")
+PY
 '
 docker exec "$container" ov backup "/app/.openviking/backup-staging/$plain_name"
 gpg --batch --yes --symmetric --cipher-algo AES256 \
