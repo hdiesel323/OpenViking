@@ -11,6 +11,17 @@ plain_name="openviking-${stamp}.ovpack"
 install -d -m 0700 "$data_dir/backup-staging" "$backup_dir"
 test -s "$passphrase_file"
 docker exec "$container" ov language en >/dev/null
+docker exec "$container" sh -lc '
+  printf "%s" "$OPENVIKING_ROOT_API_KEY" |
+    ov config add custom \
+      --name kanister-backup-local \
+      --url http://127.0.0.1:1933 \
+      --root-api-key-stdin \
+      --account kanister \
+      --user tenant-1 \
+      --activate \
+      -o json >/dev/null
+'
 docker exec "$container" ov backup "/app/.openviking/backup-staging/$plain_name"
 gpg --batch --yes --symmetric --cipher-algo AES256 \
   --passphrase-file "$passphrase_file" \
