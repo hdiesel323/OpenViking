@@ -14,6 +14,8 @@ fork branch `feat/red-3052-dialectic-memory`. It is not a deployment action.
   no host port, so Kanister is the only supported caller.
 - Probe liveness with `GET /health` and readiness with `GET /ready`.
 - Store all secrets outside this repo and outside the compose file.
+- Enable OpenViking AES-256-GCM file encryption and keep `master.key` mode 0600.
+- Install the supplied systemd timer for nightly GPG-encrypted OVPack backups.
 
 ## Example
 
@@ -33,6 +35,13 @@ provisioned by the operator's secret/config system. Do not persist the exported
 shell value; the example is intended for a short-lived Infisical-backed deploy
 process. This repository intentionally contains no root API key, embedding key,
 VLM key, Infisical token, or machine credential.
+
+Start from `ov.conf.example`. Provision `master.key` and
+`/etc/openviking-dialectic/backup.passphrase` from separate Infisical secrets;
+neither belongs in the image, repository, or backup archive. Install
+`backup.sh` at `/opt/stacks/openviking-dialectic/backup.sh` and the unit files
+under `/etc/systemd/system`, then enable
+`openviking-dialectic-backup.timer`.
 
 ## Resource Defaults
 

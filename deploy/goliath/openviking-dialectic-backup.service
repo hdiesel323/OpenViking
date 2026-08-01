@@ -1,0 +1,12 @@
+[Unit]
+Description=Encrypted OpenViking dialectic backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/stacks/openviking-dialectic/backup.sh
+User=root
+Group=root
+PrivateTmp=true
+NoNewPrivileges=true
