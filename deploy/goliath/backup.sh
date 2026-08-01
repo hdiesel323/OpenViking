@@ -36,5 +36,6 @@ gpg --batch --yes --symmetric --cipher-algo AES256 \
   --passphrase-file "$passphrase_file" \
   --output "$backup_dir/${plain_name}.gpg" \
   "$data_dir/backup-staging/$plain_name"
+chmod 0600 "$backup_dir/${plain_name}.gpg"
 rm -f "$data_dir/backup-staging/$plain_name"
 find "$backup_dir" -type f -name 'openviking-*.ovpack.gpg' -mtime +14 -delete
