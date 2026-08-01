@@ -29,6 +29,7 @@
     "host": "0.0.0.0",
     "port": 1933,
     "workers": 1,
+    "auth_mode": "trusted",
     "root_api_key": "${OPENVIKING_ROOT_API_KEY}",
     "cors_origins": []
   },
