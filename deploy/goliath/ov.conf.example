@@ -1,0 +1,58 @@
+{
+  "storage": {
+    "workspace": "/app/.openviking/workspace",
+    "vectordb": {
+      "name": "context",
+      "backend": "local",
+      "project": "kanister-additive"
+    },
+    "agfs": {
+      "backend": "local",
+      "timeout": 10
+    }
+  },
+  "encryption": {
+    "enabled": true,
+    "provider": "local",
+    "local": {
+      "key_file": "/app/.openviking/master.key"
+    },
+    "api_key_hashing": {
+      "enabled": true
+    }
+  },
+  "log": {
+    "level": "INFO",
+    "output": "stdout"
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 1933,
+    "workers": 1,
+    "auth_mode": "trusted",
+    "root_api_key": "${OPENVIKING_ROOT_API_KEY}",
+    "cors_origins": []
+  },
+  "embedding": {
+    "dense": {
+      "provider": "ollama",
+      "model": "nomic-embed-text",
+      "api_base": "http://goliath-ollama:11434/v1",
+      "dimension": 768,
+      "input": "text"
+    },
+    "max_concurrent": 4
+  },
+  "vlm": {
+    "provider": "litellm",
+    "model": "ollama/qwen2.5:3b",
+    "api_key": "no-key",
+    "api_base": "http://goliath-ollama:11434",
+    "temperature": 0.0,
+    "max_retries": 2,
+    "extra_request_body": {
+      "num_ctx": 16384,
+      "think": false
+    }
+  }
+}

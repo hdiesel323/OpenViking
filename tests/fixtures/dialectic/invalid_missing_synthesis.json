@@ -1,0 +1,15 @@
+{
+  "claim": "This fixture is intentionally invalid.",
+  "counterclaim": "It lacks a synthesis.",
+  "evidence_references": [],
+  "confidence": 0.5,
+  "falsifier": "Validation accepts the missing synthesis.",
+  "risk_class": "low",
+  "scope": {
+    "summary": "Invalid fixture",
+    "categories": ["tests"],
+    "reversible": true
+  },
+  "expiry": "2027-01-31T00:00:00Z",
+  "promotion_status": "draft"
+}

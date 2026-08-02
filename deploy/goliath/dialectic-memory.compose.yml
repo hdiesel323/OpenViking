@@ -1,0 +1,44 @@
+services:
+  openviking-dialectic:
+    image: ${OPENVIKING_IMAGE:?pin the private fork image by digest, for example ghcr.io/hdiesel323/openviking@sha256:...}
+    container_name: openviking-dialectic
+    restart: unless-stopped
+    environment:
+      OPENVIKING_WITH_BOT: "0"
+      OPENVIKING_SERVER_HOST: "0.0.0.0"
+      OPENVIKING_CONFIG_FILE: "/app/.openviking/ov.conf"
+      OPENVIKING_CLI_CONFIG_FILE: "/app/.openviking/ovcli.conf"
+      OPENVIKING_HEALTH_MAX_ATTEMPTS: "180"
+      OPENVIKING_ROOT_API_KEY: ${OPENVIKING_ROOT_API_KEY:?load the root key from Infisical}
+    volumes:
+      - type: bind
+        source: ${OPENVIKING_DATA_DIR:-/opt/openviking-dialectic}
+        target: /app/.openviking
+    networks:
+      - canister-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:1933/health >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+    cpus: "2.0"
+    mem_limit: 4g
+    pids_limit: 512
+    read_only: true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:size=256m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  canister-network:
+    external: true
+    name: canister-network
